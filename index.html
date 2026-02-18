@@ -3,86 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StyleBox - Модный помощник</title>
+    <title>StyleBox - Твой стиль</title>
     <link rel="stylesheet" href="style.css">
+    <!-- QR Code библиотека -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 </head>
 <body>
     <div class="app">
-        <!-- Шапка с Telegram интеграцией -->
+        <!-- Шапка с меню -->
         <header class="header">
             <div class="header-top">
                 <h1 class="logo">Style<span>Box</span></h1>
                 <div class="header-actions">
                     <button class="icon-btn" id="themeToggle">🌙</button>
-                    <button class="cart-icon" id="cartToggle">
-                        🛒 <span class="cart-badge" id="cartBadge">0</span>
-                    </button>
+                    <button class="icon-btn" id="menuToggle">☰</button>
                 </div>
             </div>
-            <p class="subtitle">Подберем идеальный образ</p>
+            
+            <!-- Боковое меню (выезжает слева) -->
+            <div class="side-menu" id="sideMenu">
+                <div class="menu-header">
+                    <h3>Меню</h3>
+                    <button class="close-menu" id="closeMenu">✕</button>
+                </div>
+                <div class="menu-content">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userAvatar">👤</div>
+                        <div class="user-name" id="userName">Гость</div>
+                    </div>
+                    
+                    <div class="menu-items">
+                        <div class="menu-item" data-page="main">
+                            <span>🏠</span> Главная
+                        </div>
+                        <div class="menu-item" data-page="wishlist">
+                            <span>❤️</span> Избранное <span class="menu-badge" id="wishlistBadge">0</span>
+                        </div>
+                        <div class="menu-item" data-page="recent">
+                            <span>⏱️</span> Недавние
+                        </div>
+                        <div class="menu-item" data-page="deals">
+                            <span>🔥</span> Горячие скидки
+                        </div>
+                        <div class="menu-item" data-page="collections">
+                            <span>📦</span> Коллекции
+                        </div>
+                        <div class="menu-item" data-page="bonus">
+                            <span>⭐</span> Бонусы <span class="menu-badge" id="bonusPoints">0</span>
+                        </div>
+                        <div class="menu-item" data-page="social">
+                            <span>👥</span> Лента друзей
+                        </div>
+                        <div class="menu-item" data-page="settings">
+                            <span>⚙️</span> Настройки
+                        </div>
+                    </div>
+                    
+                    <div class="menu-footer">
+                        <div class="points-balance">
+                            <span>💎 Ваши бонусы:</span>
+                            <span class="points-value" id="pointsDisplay">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Оверлей для меню -->
+            <div class="menu-overlay" id="menuOverlay"></div>
+            
+            <!-- Нижняя навигация -->
+            <nav class="bottom-nav">
+                <div class="nav-item active" data-page="main">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Главная</span>
+                </div>
+                <div class="nav-item" data-page="wishlist">
+                    <span class="nav-icon">❤️</span>
+                    <span class="nav-label">Избранное</span>
+                    <span class="nav-badge" id="navWishlistBadge">0</span>
+                </div>
+                <div class="nav-item" data-page="deals">
+                    <span class="nav-icon">🔥</span>
+                    <span class="nav-label">Скидки</span>
+                </div>
+                <div class="nav-item" data-page="cart">
+                    <span class="nav-icon">🛒</span>
+                    <span class="nav-label">Корзина</span>
+                    <span class="nav-badge" id="navCartBadge">0</span>
+                </div>
+                <div class="nav-item" data-page="profile">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-label">Профиль</span>
+                </div>
+            </nav>
         </header>
 
-        <!-- Поиск и фильтры -->
-        <div class="search-section">
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Поиск одежды...">
-            </div>
-        </div>
+        <!-- Основной контент -->
+        <main class="main-content" id="mainContent">
+            <!-- Динамически загружаемые страницы будут здесь -->
+        </main>
 
-        <div class="filters-wrapper">
-            <div class="filters-scroll" id="filters">
-                <button class="filter-btn active" data-filter="all">Все</button>
-                <button class="filter-btn" data-filter="shirts">👕 Футболки</button>
-                <button class="filter-btn" data-filter="pants">👖 Штаны</button>
-                <button class="filter-btn" data-filter="shoes">👟 Обувь</button>
-                <button class="filter-btn" data-filter="hoodies">🧥 Худи</button>
-                <button class="filter-btn" data-filter="accessories">🧢 Аксессуары</button>
-            </div>
-        </div>
-
-        <!-- Сортировка -->
-        <div class="sort-bar">
-            <span>Сортировать:</span>
-            <select id="sortSelect">
-                <option value="default">По умолчанию</option>
-                <option value="priceAsc">Цена ↑</option>
-                <option value="priceDesc">Цена ↓</option>
-                <option value="nameAsc">По имени ↑</option>
-                <option value="nameDesc">По имени ↓</option>
-            </select>
-        </div>
-
-        <!-- Товары -->
-        <div class="products-grid" id="productsGrid"></div>
-
-        <!-- Корзина (боковое меню) -->
-        <div class="cart-sidebar" id="cartSidebar">
-            <div class="cart-header">
-                <h2>Корзина 🛒</h2>
-                <button class="close-cart" id="closeCart">✕</button>
-            </div>
-            <div class="cart-items" id="cartItems"></div>
-            <div class="cart-footer">
-                <div class="cart-total">
-                    <span>Итого:</span>
-                    <span class="total-price" id="cartTotal">0 ₽</span>
-                </div>
-                <button class="checkout-btn" id="checkoutBtn">Оформить заказ</button>
-                <button class="clear-cart-btn" id="clearCartBtn">Очистить корзину</button>
-            </div>
-        </div>
-
-        <!-- Попап товара -->
-        <div class="product-modal" id="productModal">
+        <!-- Попапы и модалки -->
+        <div class="modal" id="productModal">
             <div class="modal-content">
                 <button class="close-modal">✕</button>
                 <div class="modal-body" id="modalBody"></div>
             </div>
         </div>
+
+        <div class="modal" id="qrModal">
+            <div class="modal-content small">
+                <button class="close-modal" onclick="closeQRModal()">✕</button>
+                <h3>QR-код товара</h3>
+                <div id="qrCodeContainer"></div>
+                <p>Отсканируйте чтобы поделиться</p>
+            </div>
+        </div>
+
+        <div class="modal" id="wheelModal">
+            <div class="modal-content">
+                <button class="close-modal" onclick="closeWheelModal()">✕</button>
+                <h3>🎡 Колесо удачи</h3>
+                <div class="wheel-container">
+                    <div class="wheel" id="wheel">
+                        <!-- Сектора будут созданы JS -->
+                    </div>
+                    <button class="spin-btn" onclick="spinWheel()">Крутить!</button>
+                </div>
+                <p class="wheel-info">Крутите колесо и получайте скидки!</p>
+            </div>
+        </div>
     </div>
 
-    <!-- Telegram Web App скрипт -->
+    <!-- Уведомления -->
+    <div class="notification-container" id="notificationContainer"></div>
+
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="script.js"></script>
 </body>
