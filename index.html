@@ -1,57 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>StyleBox - Модная одежда</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleBox - Модный помощник</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Шапка -->
-        <header>
-            <h1>👕 StyleBox</h1>
-            <p>Найди свой стиль!</p>
+    <div class="app">
+        <!-- Шапка с Telegram интеграцией -->
+        <header class="header">
+            <div class="header-top">
+                <h1 class="logo">Style<span>Box</span></h1>
+                <div class="header-actions">
+                    <button class="icon-btn" id="themeToggle">🌙</button>
+                    <button class="cart-icon" id="cartToggle">
+                        🛒 <span class="cart-badge" id="cartBadge">0</span>
+                    </button>
+                </div>
+            </div>
+            <p class="subtitle">Подберем идеальный образ</p>
         </header>
 
-        <!-- Корзина -->
-        <div class="cart-section">
-            <h2>🛒 Корзина: <span id="cart-count">0</span> товаров</h2>
-            <button onclick="showCart()">Посмотреть корзину</button>
-            <button onclick="clearCart()">Очистить</button>
-        </div>
-
-        <!-- Фильтры -->
-        <div class="filters">
-            <button onclick="filterProducts('all')">Всё</button>
-            <button onclick="filterProducts('shirts')">Футболки</button>
-            <button onclick="filterProducts('pants')">Штаны</button>
-            <button onclick="filterProducts('shoes')">Обувь</button>
-        </div>
-
-        <!-- Товары -->
-        <div class="products" id="products-container">
-            <!-- Товары появятся здесь с помощью JavaScript -->
-        </div>
-
-        <!-- Попап корзины -->
-        <div class="popup" id="cart-popup">
-            <div class="popup-content">
-                <h2>🛒 Ваша корзина</h2>
-                <div id="cart-items"></div>
-                <button onclick="closeCart()">Закрыть</button>
-                <button onclick="buyNow()" class="buy-btn">Купить сейчас!</button>
+        <!-- Поиск и фильтры -->
+        <div class="search-section">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Поиск одежды...">
             </div>
         </div>
 
-        <!-- Футер -->
-        <footer>
-            <p>StyleBox © 2025 - Подбор модной одежды</p>
-            <p>Для Telegram Mini Apps</p>
-        </footer>
+        <div class="filters-wrapper">
+            <div class="filters-scroll" id="filters">
+                <button class="filter-btn active" data-filter="all">Все</button>
+                <button class="filter-btn" data-filter="shirts">👕 Футболки</button>
+                <button class="filter-btn" data-filter="pants">👖 Штаны</button>
+                <button class="filter-btn" data-filter="shoes">👟 Обувь</button>
+                <button class="filter-btn" data-filter="hoodies">🧥 Худи</button>
+                <button class="filter-btn" data-filter="accessories">🧢 Аксессуары</button>
+            </div>
+        </div>
+
+        <!-- Сортировка -->
+        <div class="sort-bar">
+            <span>Сортировать:</span>
+            <select id="sortSelect">
+                <option value="default">По умолчанию</option>
+                <option value="priceAsc">Цена ↑</option>
+                <option value="priceDesc">Цена ↓</option>
+                <option value="nameAsc">По имени ↑</option>
+                <option value="nameDesc">По имени ↓</option>
+            </select>
+        </div>
+
+        <!-- Товары -->
+        <div class="products-grid" id="productsGrid"></div>
+
+        <!-- Корзина (боковое меню) -->
+        <div class="cart-sidebar" id="cartSidebar">
+            <div class="cart-header">
+                <h2>Корзина 🛒</h2>
+                <button class="close-cart" id="closeCart">✕</button>
+            </div>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Итого:</span>
+                    <span class="total-price" id="cartTotal">0 ₽</span>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn">Оформить заказ</button>
+                <button class="clear-cart-btn" id="clearCartBtn">Очистить корзину</button>
+            </div>
+        </div>
+
+        <!-- Попап товара -->
+        <div class="product-modal" id="productModal">
+            <div class="modal-content">
+                <button class="close-modal">✕</button>
+                <div class="modal-body" id="modalBody"></div>
+            </div>
+        </div>
     </div>
 
+    <!-- Telegram Web App скрипт -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="script.js"></script>
 </body>
-
 </html>
