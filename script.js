@@ -15,6 +15,7 @@ if (window.Telegram?.WebApp) {
     
     console.log('🎨 Telegram тема отключена');
 }
+
 // Telegram Web App инициализация
 const tg = window.Telegram?.WebApp;
 if (tg) {
@@ -33,18 +34,217 @@ let state = {
     points: 0
 };
 
-// Товары
+// ТОВАРЫ С ФОТОГРАФИЯМИ (20 штук)
 const products = [
-    { id: 1, name: "Красная футболка", price: 999, oldPrice: 1299, category: "shirts", emoji: "👕", description: "Стильная красная футболка из 100% хлопка." },
-    { id: 2, name: "Синие джинсы", price: 1999, oldPrice: 2499, category: "pants", emoji: "👖", description: "Классические синие джинсы." },
-    { id: 3, name: "Кроссовки Nike", price: 4999, oldPrice: 5999, category: "shoes", emoji: "👟", description: "Оригинальные кроссовки Nike." },
-    { id: 4, name: "Белая рубашка", price: 1499, oldPrice: 1799, category: "shirts", emoji: "👔", description: "Классическая белая рубашка." },
-    { id: 5, name: "Черные штаны", price: 1799, oldPrice: 2199, category: "pants", emoji: "🩳", description: "Стильные черные брюки." },
-    { id: 6, name: "Кеды Converse", price: 3999, oldPrice: 4599, category: "shoes", emoji: "👞", description: "Классические кеды Converse." },
-    { id: 7, name: "Худи с капюшоном", price: 2999, oldPrice: 3599, category: "hoodies", emoji: "🧥", description: "Теплое худи с капюшоном." },
-    { id: 8, name: "Шорты летние", price: 1299, oldPrice: 1599, category: "pants", emoji: "🩲", description: "Легкие летние шорты." },
-    { id: 9, name: "Бейсболка", price: 899, oldPrice: 1199, category: "accessories", emoji: "🧢", description: "Стильная бейсболка." },
-    { id: 10, name: "Солнцезащитные очки", price: 1499, oldPrice: 1999, category: "accessories", emoji: "🕶️", description: "Модные солнцезащитные очки." }
+    // ФУТБОЛКИ (shirts)
+    { 
+        id: 1, 
+        name: "Красная футболка", 
+        price: 999, 
+        oldPrice: 1299, 
+        category: "shirts", 
+        emoji: "👕", 
+        image: "images/red-tshirt.jpg",
+        description: "Стильная красная футболка из 100% хлопка. Идеально для повседневной носки." 
+    },
+    { 
+        id: 2, 
+        name: "Черная футболка оверсайз", 
+        price: 1199, 
+        oldPrice: 1599, 
+        category: "shirts", 
+        emoji: "👕", 
+        image: "images/black-tshirt.jpg",
+        description: "Модная футболка свободного кроя. Подойдет к любым джинсам." 
+    },
+    { 
+        id: 3, 
+        name: "Белая футболка с принтом", 
+        price: 1399, 
+        oldPrice: 1799, 
+        category: "shirts", 
+        emoji: "👕", 
+        image: "images/white-print.jpg",
+        description: "Оригинальный принт, качественная печать, не выцветает." 
+    },
+    { 
+        id: 4, 
+        name: "Поло синее", 
+        price: 1599, 
+        oldPrice: 1999, 
+        category: "shirts", 
+        emoji: "👔", 
+        image: "images/blue-polo.jpg",
+        description: "Классическое поло из хлопка. Для стильных образов." 
+    },
+    
+    // ШТАНЫ (pants)
+    { 
+        id: 5, 
+        name: "Синие джинсы", 
+        price: 1999, 
+        oldPrice: 2499, 
+        category: "pants", 
+        emoji: "👖", 
+        image: "images/blue-jeans.jpg",
+        description: "Классические синие джинсы. Удобные и практичные." 
+    },
+    { 
+        id: 6, 
+        name: "Черные брюки чинос", 
+        price: 1799, 
+        oldPrice: 2199, 
+        category: "pants", 
+        emoji: "🩳", 
+        image: "images/black-chinos.jpg",
+        description: "Стильные черные брюки. Универсальный вариант для офиса и прогулок." 
+    },
+    { 
+        id: 7, 
+        name: "Джинсы скинни", 
+        price: 1899, 
+        oldPrice: 2399, 
+        category: "pants", 
+        emoji: "👖", 
+        image: "images/skinny-jeans.jpg",
+        description: "Обтягивающие джинсы, подчеркивают фигуру." 
+    },
+    { 
+        id: 8, 
+        name: "Спортивные штаны", 
+        price: 1299, 
+        oldPrice: 1599, 
+        category: "pants", 
+        emoji: "👖", 
+        image: "images/sport-pants.jpg",
+        description: "Удобные штаны для спорта и дома." 
+    },
+    
+    // ОБУВЬ (shoes)
+    { 
+        id: 9, 
+        name: "Кроссовки Nike Air", 
+        price: 4999, 
+        oldPrice: 5999, 
+        category: "shoes", 
+        emoji: "👟", 
+        image: "images/nike-air.jpg",
+        description: "Оригинальные кроссовки Nike. Максимальный комфорт при ходьбе." 
+    },
+    { 
+        id: 10, 
+        name: "Кеды Converse", 
+        price: 3999, 
+        oldPrice: 4599, 
+        category: "shoes", 
+        emoji: "👞", 
+        image: "images/converse.jpg",
+        description: "Классические кеды Converse. Всегда в моде." 
+    },
+    { 
+        id: 11, 
+        name: "Ботинки зимние", 
+        price: 5999, 
+        oldPrice: 6999, 
+        category: "shoes", 
+        emoji: "👢", 
+        image: "images/winter-boots.jpg",
+        description: "Теплые зимние ботинки, не скользят." 
+    },
+    { 
+        id: 12, 
+        name: "Туфли мужские", 
+        price: 3299, 
+        oldPrice: 3899, 
+        category: "shoes", 
+        emoji: "👞", 
+        image: "images/shoes.jpg",
+        description: "Классические туфли на каждый день." 
+    },
+    
+    // ХУДИ (hoodies)
+    { 
+        id: 13, 
+        name: "Худи с капюшоном серая", 
+        price: 2999, 
+        oldPrice: 3599, 
+        category: "hoodies", 
+        emoji: "🧥", 
+        image: "images/grey-hoodie.jpg",
+        description: "Теплое худи с капюшоном. Для уютных вечеров." 
+    },
+    { 
+        id: 14, 
+        name: "Толстовка с принтом", 
+        price: 2799, 
+        oldPrice: 3299, 
+        category: "hoodies", 
+        emoji: "🧥", 
+        image: "images/print-hoodie.jpg",
+        description: "Модная толстовка с оригинальным принтом." 
+    },
+    { 
+        id: 15, 
+        name: "Олимпийка", 
+        price: 2499, 
+        oldPrice: 2999, 
+        category: "hoodies", 
+        emoji: "🧥", 
+        image: "images/sweatshirt.jpg",
+        description: "Спортивный стиль на каждый день." 
+    },
+    
+    // АКСЕССУАРЫ (accessories)
+    { 
+        id: 16, 
+        name: "Бейсболка черная", 
+        price: 899, 
+        oldPrice: 1199, 
+        category: "accessories", 
+        emoji: "🧢", 
+        image: "images/cap.jpg",
+        description: "Стильная бейсболка. Защитит от солнца." 
+    },
+    { 
+        id: 17, 
+        name: "Солнцезащитные очки", 
+        price: 1499, 
+        oldPrice: 1999, 
+        category: "accessories", 
+        emoji: "🕶️", 
+        image: "images/sunglasses.jpg",
+        description: "Модные солнцезащитные очки." 
+    },
+    { 
+        id: 18, 
+        name: "Рюкзак городской", 
+        price: 2299, 
+        oldPrice: 2799, 
+        category: "accessories", 
+        emoji: "🎒", 
+        image: "images/backpack.jpg",
+        description: "Вместительный рюкзак для учебы и прогулок." 
+    },
+    { 
+        id: 19, 
+        name: "Шарф зимний", 
+        price: 799, 
+        oldPrice: 999, 
+        category: "accessories", 
+        emoji: "🧣", 
+        image: "images/scarf.jpg",
+        description: "Теплый шарф для холодной погоды." 
+    },
+    { 
+        id: 20, 
+        name: "Шапка вязаная", 
+        price: 699, 
+        oldPrice: 899, 
+        category: "accessories", 
+        emoji: "🧤", 
+        image: "images/hat.jpg",
+        description: "Модная вязаная шапка." 
+    }
 ];
 
 // Инициализация
@@ -85,7 +285,6 @@ function setupEventListeners() {
     document.getElementById('closeCart')?.addEventListener('click', toggleCart);
     document.getElementById('checkoutBtn')?.addEventListener('click', checkout);
     document.getElementById('clearCartBtn')?.addEventListener('click', clearCart);
-
     document.getElementById('bottomCartBtn')?.addEventListener('click', toggleCart);
 }
 
@@ -135,7 +334,7 @@ function renderPage(page) {
         case 'settings':
             content.innerHTML = renderSettingsPage();
             break;
-             case 'support':
+        case 'support':
             content.innerHTML = renderSupportPage();
             break;
         default:
@@ -327,11 +526,6 @@ function renderCartPage() {
 
 // ПРОФИЛЬ
 function renderProfilePage() {
-    const stats = {
-        orders: state.cart.filter(i => i.purchased).length || 0,
-        saved: state.products.filter(p => p.oldPrice).length * 500 || 0
-    };
-    
     return `
         <div class="profile-header">
             <div class="profile-avatar-large">${getAvatar()}</div>
@@ -422,7 +616,7 @@ function renderSettingsPage() {
             <h4>О приложении</h4>
             <div class="settings-item">
                 <span>Версия</span>
-                <span>2.0.0</span>
+                <span>3.0.0</span>
             </div>
             <div class="settings-item">
                 <span>Разработчик</span>
@@ -431,6 +625,7 @@ function renderSettingsPage() {
         </div>
     `;
 }
+
 // СТРАНИЦА ПОДДЕРЖКИ
 function renderSupportPage() {
     return `
@@ -535,7 +730,7 @@ function openTelegram() {
     }
 }
 
-// СОЗДАНИЕ КАРТОЧКИ ТОВАРА
+// СОЗДАНИЕ КАРТОЧКИ ТОВАРА (с поддержкой фото)
 function createProductCard(product) {
     const inCart = state.cart.some(item => item.id === product.id);
     const inWishlist = state.wishlist.includes(product.id);
@@ -554,7 +749,12 @@ function createProductCard(product) {
                 </div>
             ` : ''}
             
-            <div class="product-image">${product.emoji}</div>
+            <div class="product-image">
+                ${product.image ? 
+                    `<img src="${product.image}" alt="${product.name}" class="product-img" onerror="this.style.display='none'; this.parentNode.innerHTML='${product.emoji}';">` : 
+                    product.emoji
+                }
+            </div>
             
             <div class="product-info">
                 <h4 class="product-name">${product.name}</h4>
@@ -574,7 +774,7 @@ function createProductCard(product) {
     `;
 }
 
-// МОДАЛЬНОЕ ОКНО ТОВАРА
+// МОДАЛЬНОЕ ОКНО ТОВАРА (с поддержкой фото)
 function showProductModal(productId) {
     const product = state.products.find(p => p.id === productId);
     
@@ -586,7 +786,12 @@ function showProductModal(productId) {
     
     modalBody.innerHTML = `
         <div class="modal-product">
-            <div class="modal-emoji">${product.emoji}</div>
+            <div class="modal-image">
+                ${product.image ? 
+                    `<img src="${product.image}" alt="${product.name}" class="modal-img" onerror="this.style.display='none'; this.parentNode.innerHTML='${product.emoji}';">` : 
+                    `<div class="modal-emoji">${product.emoji}</div>`
+                }
+            </div>
             <h2>${product.name}</h2>
             
             <div class="modal-price-block">
@@ -857,6 +1062,7 @@ function updateAllBadges() {
         bottomBonus.textContent = state.points;
     }
 }
+
 // СОХРАНЕНИЕ ДАННЫХ
 function saveState() {
     const saveData = {
@@ -969,7 +1175,3 @@ function toggleTheme() {
 function addPageButtonsListeners() {
     // Здесь можно добавить специфичные обработчики если нужно
 }
-
-
-
-
