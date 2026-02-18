@@ -85,6 +85,8 @@ function setupEventListeners() {
     document.getElementById('closeCart')?.addEventListener('click', toggleCart);
     document.getElementById('checkoutBtn')?.addEventListener('click', checkout);
     document.getElementById('clearCartBtn')?.addEventListener('click', clearCart);
+
+    document.getElementById('bottomCartBtn')?.addEventListener('click', toggleCart);
 }
 
 // НАВИГАЦИЯ
@@ -820,14 +822,22 @@ function updateAllBadges() {
     const wishlistCount = state.wishlist.length;
     
     const cartBadge = document.getElementById('navCartBadge');
+    const bottomCartBadge = document.getElementById('bottomCartBadge');
     const wishlistBadge = document.getElementById('navWishlistBadge');
     const menuWishlistBadge = document.getElementById('wishlistBadge');
     const pointsDisplay = document.getElementById('pointsDisplay');
     const bottomBonus = document.getElementById('bottomBonus');
     
+    // Обновляем бейдж корзины в шапке
     if (cartBadge) {
         cartBadge.textContent = cartCount;
         cartBadge.style.display = cartCount > 0 ? 'flex' : 'none';
+    }
+    
+    // ОБНОВЛЯЕМ БЕЙДЖ КОРЗИНЫ ВНИЗУ
+    if (bottomCartBadge) {
+        bottomCartBadge.textContent = cartCount;
+        bottomCartBadge.style.display = cartCount > 0 ? 'flex' : 'none';
     }
     
     if (wishlistBadge) {
@@ -842,12 +852,11 @@ function updateAllBadges() {
         pointsDisplay.textContent = state.points;
     }
     
-    // ОБНОВЛЯЕМ БОНУСЫ В НИЖНЕЙ ПАНЕЛИ
+    // Обновляем бонусы внизу
     if (bottomBonus) {
         bottomBonus.textContent = state.points;
     }
 }
-
 // СОХРАНЕНИЕ ДАННЫХ
 function saveState() {
     const saveData = {
@@ -960,6 +969,7 @@ function toggleTheme() {
 function addPageButtonsListeners() {
     // Здесь можно добавить специфичные обработчики если нужно
 }
+
 
 
 
