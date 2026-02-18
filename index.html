@@ -78,16 +78,16 @@
             <!-- Сюда будет загружаться контент -->
         </main>
 
-        <!-- Простая панель с бонусами и кнопкой меню (ЗАМЕНЯЕТ нижнюю навигацию) -->
-        <div class="bottom-panel">
-            <div class="bonus-widget">
-                <span class="bonus-icon">⭐</span>
-                <span class="bonus-amount" id="bottomBonus">0</span>
-            </div>
-            <button class="open-menu-btn" id="bottomMenuBtn">
-                ☰ Открыть меню
-            </button>
-        </div>
+       <!-- Нижняя панель с бонусами и корзиной -->
+<div class="bottom-panel">
+    <div class="bonus-widget">
+        <span class="bonus-icon">⭐</span>
+        <span class="bonus-amount" id="bottomBonus">0</span>
+    </div>
+    <button class="cart-btn-panel" id="bottomCartBtn">
+        🛒 <span class="cart-badge-panel" id="bottomCartBadge">0</span>
+    </button>
+</div>
 
         <!-- Боковая корзина -->
         <div class="cart-sidebar" id="cartSidebar">
@@ -121,3 +121,4 @@
     <script src="script.js?v=3.0"></script>
 </body>
 </html>
+
