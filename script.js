@@ -1,321 +1,379 @@
 // Telegram Web App инициализация
-const tg = window.Telegram?.WebApp;
-if (tg) {
-    tg.expand();
-    tg.enableClosingConfirmation();
+const tg = window.Telegram.WebApp;
+tg.expand(); // Растягиваем на весь экран
+tg.enableClosingConfirmation(); // Подтверждение закрытия
+
+// Тема Telegram
+if (tg.colorScheme === 'dark') {
+    document.body.classList.add('telegram-dark');
 } else {
-    console.log('Telegram Web App не найден, работаем в обычном режиме');
+    document.body.classList.add('telegram-light');
 }
 
-// Базовое состояние с проверками
-let state = {
-    currentPage: 'main',
-    products: [],
-    cart: [],
-    wishlist: [],
-    recentlyViewed: [],
-    user: null,
-    points: 0,
-    theme: 'light'
-};
-
-// Минимальные товары для теста
-const testProducts = [
-    { id: 1, name: "Красная футболка", price: 999, oldPrice: 1299, category: "shirts", emoji: "👕", description: "Тест", rating: 4.5, reviews: [] },
-    { id: 2, name: "Синие джинсы", price: 1999, oldPrice: 2499, category: "pants", emoji: "👖", description: "Тест", rating: 4.5, reviews: [] }
+// Данные товаров
+const products = [
+    { id: 1, name: "Красная футболка", price: 999, oldPrice: 1299, category: "shirts", emoji: "👕", description: "Стильная красная футболка из 100% хлопка. Идеально подходит для повседневной носки.", liked: false, inCart: false, quantity: 0, discount: 23 },
+    { id: 2, name: "Синие джинсы", price: 1999, oldPrice: 2499, category: "pants", emoji: "👖", description: "Классические синие джинсы. Удобные и практичные.", liked: false, inCart: false, quantity: 0, discount: 20 },
+    { id: 3, name: "Кроссовки Nike", price: 4999, oldPrice: 5999, category: "shoes", emoji: "👟", description: "Оригинальные кроссовки Nike. Максимальный комфорт при ходьбе.", liked: false, inCart: false, quantity: 0, discount: 16 },
+    { id: 4, name: "Белая рубашка", price: 1499, oldPrice: 1799, category: "shirts", emoji: "👔", description: "Классическая белая рубашка. Подойдет для офиса и особых случаев.", liked: false, inCart: false, quantity: 0, discount: 17 },
+    { id: 5, name: "Черные штаны", price: 1799, oldPrice: 2199, category: "pants", emoji: "🩳", description: "Стильные черные брюки. Универсальный вариант.", liked: false, inCart: false, quantity: 0, discount: 18 },
+    { id: 6, name: "Кеды Converse", price: 3999, oldPrice: 4599, category: "shoes", emoji: "👞", description: "Классические кеды Converse. Всегда в моде.", liked: false, inCart: false, quantity: 0, discount: 13 },
+    { id: 7, name: "Худи с капюшоном", price: 2999, oldPrice: 3599, category: "hoodies", emoji: "🧥", description: "Теплое худи с капюшоном. Для уютных вечеров.", liked: false, inCart: false, quantity: 0, discount: 17 },
+    { id: 8, name: "Шорты летние", price: 1299, oldPrice: 1599, category: "pants", emoji: "🩲", description: "Легкие летние шорты. Для жаркой погоды.", liked: false, inCart: false, quantity: 0, discount: 19 },
+    { id: 9, name: "Бейсболка", price: 899, oldPrice: 1199, category: "accessories", emoji: "🧢", description: "Стильная бейсболка. Защитит от солнца.", liked: false, inCart: false, quantity: 0, discount: 25 },
+    { id: 10, name: "Солнцезащитные очки", price: 1499, oldPrice: 1999, category: "accessories", emoji: "🕶️", description: "Модные солнцезащитные очки.", liked: false, inCart: false, quantity: 0, discount: 25 }
 ];
 
-// Ждем полной загрузки DOM
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM загружен, инициализация...');
-    
-    try {
-        // Загружаем товары
-        state.products = testProducts;
-        
-        // Загружаем сохраненное состояние
-        loadState();
-        
-        // Проверяем существование всех элементов
-        checkElements();
-        
-        // Настраиваем обработчики
-        setupEventListeners();
-        
-        // Показываем главную страницу
-        renderMainPageSimple();
-        
-        // Обновляем бейджи
-        updateBadges();
-        
-        console.log('Инициализация завершена успешно');
-    } catch (error) {
-        console.error('Ошибка при инициализации:', error);
-        showErrorMessage();
-    }
+// Состояние приложения
+let currentFilter = 'all';
+let currentSort = 'default';
+let searchQuery = '';
+let cart = [];
+
+// Инициализация
+document.addEventListener('DOMContentLoaded', () => {
+    loadCart();
+    renderProducts();
+    setupEventListeners();
+    updateCartBadge();
 });
 
-// Проверка всех необходимых элементов
-function checkElements() {
-    const required = ['menuToggle', 'themeToggle', 'mainContent'];
-    required.forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) {
-            console.warn(`Элемент #${id} не найден!`);
-        } else {
-            console.log(`✅ #${id} найден`);
+// Настройка обработчиков событий
+function setupEventListeners() {
+    // Фильтры
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentFilter = e.target.dataset.filter;
+            renderProducts();
+        });
+    });
+
+    // Поиск
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        searchQuery = e.target.value.toLowerCase();
+        renderProducts();
+    });
+
+    // Сортировка
+    document.getElementById('sortSelect').addEventListener('change', (e) => {
+        currentSort = e.target.value;
+        renderProducts();
+    });
+
+    // Тема
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+    // Корзина
+    document.getElementById('cartToggle').addEventListener('click', toggleCart);
+    document.getElementById('closeCart').addEventListener('click', toggleCart);
+    document.getElementById('checkoutBtn').addEventListener('click', checkout);
+    document.getElementById('clearCartBtn').addEventListener('click', clearCart);
+
+    // Закрытие модалки по клику вне
+    document.getElementById('productModal').addEventListener('click', (e) => {
+        if (e.target.classList.contains('product-modal')) {
+            closeModal();
         }
     });
 }
 
-// Простая главная страница для теста
-function renderMainPageSimple() {
-    const content = document.getElementById('mainContent');
-    if (!content) {
-        console.error('mainContent не найден!');
-        return;
+// Отрисовка товаров
+function renderProducts() {
+    const grid = document.getElementById('productsGrid');
+    
+    let filteredProducts = products;
+    
+    // Фильтрация по категории
+    if (currentFilter !== 'all') {
+        filteredProducts = filteredProducts.filter(p => p.category === currentFilter);
     }
     
-    content.innerHTML = `
-        <div style="padding: 20px; text-align: center;">
-            <h2 style="color: #8A2BE2; margin-bottom: 20px;">👕 StyleBox</h2>
-            <p style="margin-bottom: 20px;">Приложение работает!</p>
-            
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
-                ${state.products.map(p => `
-                    <div style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                        <div style="font-size: 40px; margin-bottom: 10px;">${p.emoji}</div>
-                        <h4>${p.name}</h4>
-                        <p style="color: #8A2BE2; font-weight: bold;">${p.price} ₽</p>
-                        <button onclick="addToCart(${p.id})" style="background: #8A2BE2; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
-                            В корзину
-                        </button>
-                    </div>
-                `).join('')}
+    // Фильтрация по поиску
+    if (searchQuery) {
+        filteredProducts = filteredProducts.filter(p => 
+            p.name.toLowerCase().includes(searchQuery) ||
+            p.category.toLowerCase().includes(searchQuery)
+        );
+    }
+    
+    // Сортировка
+    filteredProducts = sortProducts(filteredProducts);
+    
+    // Отрисовка
+    grid.innerHTML = filteredProducts.map(product => createProductCard(product)).join('');
+    
+    // Добавляем обработчики для кнопок
+    filteredProducts.forEach(product => {
+        const addBtn = document.querySelector(`[data-add-id="${product.id}"]`);
+        const likeBtn = document.querySelector(`[data-like-id="${product.id}"]`);
+        const card = document.querySelector(`[data-card-id="${product.id}"]`);
+        
+        if (addBtn) {
+            addBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                addToCart(product.id);
+            });
+        }
+        
+        if (likeBtn) {
+            likeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleLike(product.id);
+            });
+        }
+        
+        if (card) {
+            card.addEventListener('click', () => showProductModal(product.id));
+        }
+    });
+}
+
+// Создание карточки товара
+function createProductCard(product) {
+    const inCart = cart.some(item => item.id === product.id);
+    const discount = product.oldPrice ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100) : 0;
+    
+    return `
+        <div class="product-card" data-card-id="${product.id}">
+            <div class="product-image">
+                ${product.emoji}
+                ${discount > 0 ? `<span class="discount-badge">-${discount}%</span>` : ''}
             </div>
-            
-            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                <button onclick="testNavigation('wishlist')" style="background: #f0f0f0; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;">❤️ Избранное</button>
-                <button onclick="testNavigation('cart')" style="background: #f0f0f0; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;">🛒 Корзина</button>
-                <button onclick="testNavigation('profile')" style="background: #f0f0f0; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;">👤 Профиль</button>
-            </div>
-            
-            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 12px; color: #666;">
-                Статус: ✅ Работает<br>
-                Корзина: ${state.cart.length} товаров<br>
-                Избранное: ${state.wishlist.length} товаров
+            <div class="product-info">
+                <h3 class="product-name">${product.name}</h3>
+                <div class="product-category">${getCategoryName(product.category)}</div>
+                <div class="product-price">
+                    <span class="current-price">${product.price} ₽</span>
+                    ${product.oldPrice ? `<span class="old-price">${product.oldPrice} ₽</span>` : ''}
+                </div>
+                <div class="product-actions">
+                    <button class="add-to-cart-btn" data-add-id="${product.id}">
+                        ${inCart ? '✓ В корзине' : 'В корзину'}
+                    </button>
+                    <button class="like-btn ${product.liked ? 'liked' : ''}" data-like-id="${product.id}">
+                        ${product.liked ? '❤️' : '🤍'}
+                    </button>
+                </div>
             </div>
         </div>
     `;
 }
 
-// Функции для тестирования
-function testNavigation(page) {
-    console.log('Навигация на:', page);
-    state.currentPage = page;
+// Сортировка товаров
+function sortProducts(products) {
+    const sorted = [...products];
     
-    const content = document.getElementById('mainContent');
-    if (!content) return;
-    
-    if (page === 'wishlist') {
-        content.innerHTML = `
-            <div style="padding: 20px; text-align: center;">
-                <h3>❤️ Избранное</h3>
-                ${state.wishlist.length === 0 ? 
-                    '<p>Пока пусто</p>' : 
-                    '<p>Товаров: ' + state.wishlist.length + '</p>'
-                }
-                <button onclick="testNavigation('main')" style="background: #8A2BE2; color: white; border: none; padding: 10px 20px; border-radius: 8px; margin-top: 20px; cursor: pointer;">
-                    На главную
-                </button>
-            </div>
-        `;
-    } else if (page === 'cart') {
-        let total = 0;
-        state.cart.forEach(item => { total += item.price * item.quantity; });
-        
-        content.innerHTML = `
-            <div style="padding: 20px; text-align: center;">
-                <h3>🛒 Корзина</h3>
-                ${state.cart.length === 0 ? 
-                    '<p>Корзина пуста</p>' : 
-                    state.cart.map(item => `
-                        <div style="background: white; padding: 10px; margin: 10px; border-radius: 8px;">
-                            ${item.name} x${item.quantity} = ${item.price * item.quantity}₽
-                        </div>
-                    `).join('')
-                }
-                ${state.cart.length > 0 ? 
-                    `<p style="font-weight: bold; margin: 10px;">Итого: ${total}₽</p>
-                     <button onclick="checkout()" style="background: #00B894; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
-                        Оформить заказ
-                     </button>` : 
-                    ''
-                }
-                <button onclick="testNavigation('main')" style="background: #8A2BE2; color: white; border: none; padding: 10px 20px; border-radius: 8px; margin-top: 20px; cursor: pointer;">
-                    На главную
-                </button>
-            </div>
-        `;
+    switch(currentSort) {
+        case 'priceAsc':
+            return sorted.sort((a, b) => a.price - b.price);
+        case 'priceDesc':
+            return sorted.sort((a, b) => b.price - a.price);
+        case 'nameAsc':
+            return sorted.sort((a, b) => a.name.localeCompare(b.name));
+        case 'nameDesc':
+            return sorted.sort((a, b) => b.name.localeCompare(a.name));
+        default:
+            return sorted;
     }
 }
 
-// Простые функции корзины
+// Получение названия категории
+function getCategoryName(category) {
+    const categories = {
+        shirts: 'Футболки',
+        pants: 'Штаны',
+        shoes: 'Обувь',
+        hoodies: 'Худи',
+        accessories: 'Аксессуары'
+    };
+    return categories[category] || category;
+}
+
+// Переключение лайка
+function toggleLike(productId) {
+    const product = products.find(p => p.id === productId);
+    product.liked = !product.liked;
+    renderProducts();
+}
+
+// Работа с корзиной
 function addToCart(productId) {
-    const product = state.products.find(p => p.id === productId);
-    if (!product) return;
-    
-    const cartItem = state.cart.find(item => item.id === productId);
+    const product = products.find(p => p.id === productId);
+    const cartItem = cart.find(item => item.id === productId);
     
     if (cartItem) {
         cartItem.quantity += 1;
     } else {
-        state.cart.push({ ...product, quantity: 1 });
+        cart.push({ ...product, quantity: 1 });
     }
     
-    saveState();
-    updateBadges();
+    saveCart();
+    updateCartBadge();
+    renderProducts();
     
-    if (tg?.HapticFeedback) {
-        tg.HapticFeedback.impactOccurred('light');
-    }
-    
-    alert(`✅ ${product.name} добавлен в корзину!`);
+    // Анимация кнопки
+    tg.HapticFeedback.impactOccurred('light');
 }
 
 function removeFromCart(productId) {
-    state.cart = state.cart.filter(item => item.id !== productId);
-    saveState();
-    updateBadges();
-    testNavigation('cart');
+    cart = cart.filter(item => item.id !== productId);
+    saveCart();
+    updateCartBadge();
+    renderCart();
+    renderProducts();
 }
 
-// Простая функция избранного
-function toggleWishlist(productId) {
-    const index = state.wishlist.indexOf(productId);
-    if (index === -1) {
-        state.wishlist.push(productId);
-        alert('❤️ Добавлено в избранное');
-    } else {
-        state.wishlist.splice(index, 1);
-        alert('💔 Удалено из избранного');
+function updateQuantity(productId, change) {
+    const cartItem = cart.find(item => item.id === productId);
+    if (cartItem) {
+        cartItem.quantity += change;
+        if (cartItem.quantity <= 0) {
+            removeFromCart(productId);
+        } else {
+            saveCart();
+            renderCart();
+        }
     }
-    saveState();
-    updateBadges();
+}
+
+// Отрисовка корзины
+function renderCart() {
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+    
+    if (cart.length === 0) {
+        cartItems.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Корзина пуста</p>';
+        cartTotal.textContent = '0 ₽';
+        return;
+    }
+    
+    let total = 0;
+    cartItems.innerHTML = cart.map(item => {
+        total += item.price * item.quantity;
+        return `
+            <div class="cart-item">
+                <span class="cart-item-emoji">${item.emoji}</span>
+                <div class="cart-item-details">
+                    <div class="cart-item-name">${item.name}</div>
+                    <div class="cart-item-price">${item.price} ₽</div>
+                </div>
+                <div class="cart-item-actions">
+                    <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">−</button>
+                    <span>${item.quantity}</span>
+                    <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                    <button class="remove-item" onclick="removeFromCart(${item.id})">🗑️</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    cartTotal.textContent = `${total} ₽`;
+}
+
+// Сохранение и загрузка корзины
+function saveCart() {
+    localStorage.setItem('stylebox_cart', JSON.stringify(cart));
+}
+
+function loadCart() {
+    const saved = localStorage.getItem('stylebox_cart');
+    if (saved) {
+        cart = JSON.parse(saved);
+    }
+}
+
+// Обновление бейджа корзины
+function updateCartBadge() {
+    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    document.getElementById('cartBadge').textContent = count;
+}
+
+// Переключение корзины
+function toggleCart() {
+    const sidebar = document.getElementById('cartSidebar');
+    sidebar.classList.toggle('open');
+    if (sidebar.classList.contains('open')) {
+        renderCart();
+    }
+}
+
+// Очистка корзины
+function clearCart() {
+    if (cart.length > 0) {
+        tg.showConfirm('Очистить корзину?', (confirmed) => {
+            if (confirmed) {
+                cart = [];
+                saveCart();
+                updateCartBadge();
+                renderCart();
+                renderProducts();
+                tg.HapticFeedback.notificationOccurred('success');
+            }
+        });
+    }
 }
 
 // Оформление заказа
 function checkout() {
-    if (state.cart.length === 0) {
-        alert('Корзина пуста!');
+    if (cart.length === 0) {
+        tg.showAlert('Корзина пуста!');
         return;
     }
     
-    const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const items = cart.map(item => `${item.name} x${item.quantity}`).join('\n');
     
-    if (confirm(`Заказ на сумму ${total}₽. Подтвердить?`)) {
-        if (tg) {
+    tg.showConfirm(`Ваш заказ:\n${items}\n\nИтого: ${total} ₽\n\nПодтвердить покупку?`, (confirmed) => {
+        if (confirmed) {
+            // Отправка данных в Telegram бота
             tg.sendData(JSON.stringify({
                 action: 'purchase',
-                items: state.cart,
-                total: total
+                items: cart,
+                total: total,
+                date: new Date().toISOString()
             }));
+            
+            cart = [];
+            saveCart();
+            updateCartBadge();
+            toggleCart();
+            renderProducts();
+            
+            tg.HapticFeedback.notificationOccurred('success');
+            tg.showAlert('Спасибо за покупку! 🎉');
         }
-        
-        state.cart = [];
-        saveState();
-        updateBadges();
-        alert('🎉 Спасибо за покупку!');
-        testNavigation('main');
-    }
+    });
 }
 
-// Обновление бейджей
-function updateBadges() {
-    const cartCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
-    const wishlistCount = state.wishlist.length;
+// Модальное окно товара
+function showProductModal(productId) {
+    const product = products.find(p => p.id === productId);
+    const modal = document.getElementById('productModal');
+    const modalBody = document.getElementById('modalBody');
     
-    const cartBadge = document.getElementById('navCartBadge');
-    const wishlistBadge = document.getElementById('navWishlistBadge');
-    const menuWishlistBadge = document.getElementById('wishlistBadge');
+    modalBody.innerHTML = `
+        <div class="modal-emoji">${product.emoji}</div>
+        <h2 class="modal-name">${product.name}</h2>
+        <div class="modal-price">${product.price} ₽</div>
+        ${product.oldPrice ? `<div style="color: var(--text-secondary); text-decoration: line-through;">Старая цена: ${product.oldPrice} ₽</div>` : ''}
+        <p class="modal-description">${product.description}</p>
+        <button class="modal-add-to-cart" onclick="addToCart(${product.id}); closeModal();">Добавить в корзину</button>
+    `;
     
-    if (cartBadge) {
-        cartBadge.textContent = cartCount;
-        cartBadge.style.display = cartCount > 0 ? 'block' : 'none';
-    }
-    
-    if (wishlistBadge) {
-        wishlistBadge.textContent = wishlistCount;
-    }
-    
-    if (menuWishlistBadge) {
-        menuWishlistBadge.textContent = wishlistCount;
-    }
+    modal.classList.add('show');
+    tg.HapticFeedback.impactOccurred('medium');
 }
 
-// Сохранение состояния
-function saveState() {
-    try {
-        const saveData = {
-            cart: state.cart,
-            wishlist: state.wishlist,
-            points: state.points
-        };
-        localStorage.setItem('stylebox_state', JSON.stringify(saveData));
-        console.log('Состояние сохранено');
-    } catch (e) {
-        console.error('Ошибка сохранения:', e);
-    }
+function closeModal() {
+    document.getElementById('productModal').classList.remove('show');
 }
 
-function loadState() {
-    try {
-        const saved = localStorage.getItem('stylebox_state');
-        if (saved) {
-            const data = JSON.parse(saved);
-            state.cart = data.cart || [];
-            state.wishlist = data.wishlist || [];
-            state.points = data.points || 0;
-            console.log('Состояние загружено');
-        }
-    } catch (e) {
-        console.error('Ошибка загрузки:', e);
-    }
-}
-
-// Простая настройка событий
-function setupEventListeners() {
-    // Меню
-    const menuToggle = document.getElementById('menuToggle');
-    if (menuToggle) {
-        menuToggle.addEventListener('click', function() {
-            alert('Меню скоро будет готово!');
-        });
-    }
-    
-    // Тема
-    const themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', function() {
-            document.body.classList.toggle('dark-theme');
-            this.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
-        });
-    }
-}
-
-// Показать ошибку
-function showErrorMessage() {
-    const content = document.getElementById('mainContent');
-    if (content) {
-        content.innerHTML = `
-            <div style="padding: 40px 20px; text-align: center; color: #666;">
-                <div style="font-size: 60px; margin-bottom: 20px;">😕</div>
-                <h3 style="margin-bottom: 20px;">Что-то пошло не так</h3>
-                <p style="margin-bottom: 30px;">Попробуйте обновить страницу</p>
-                <button onclick="location.reload()" style="background: #8A2BE2; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer;">
-                    Обновить
-                </button>
-            </div>
-        `;
-    }
+// Переключение темы
+function toggleTheme() {
+    const isDark = document.body.classList.toggle('telegram-dark');
+    const themeBtn = document.getElementById('themeToggle');
+    themeBtn.textContent = isDark ? '☀️' : '🌙';
+    tg.setHeaderColor(isDark ? '#1A1A2E' : '#F8F9FF');
 }
