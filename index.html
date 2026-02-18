@@ -3,51 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
- <meta name="theme-color" content="#FFFFFF">
+    
+    <!-- Фиксим тему Telegram -->
+    <meta name="theme-color" content="#FFFFFF">
     <meta name="color-scheme" content="light only">
     
     <title>StyleBox - Твой стиль</title>
-    <!-- Принудительное обновление кэша -->
-    <link rel="stylesheet" href="style.css?v=2.0">
-    <!-- Запасной вариант на случай ошибки -->
-    <style>
-        /* Базовые стили на случай если CSS не загрузится */
-        body { margin: 0; font-family: Arial; background: #f5f5f5; }
-        .debug-info { 
-            background: #ff6b6b; 
-            color: white; 
-            padding: 10px; 
-            text-align: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 9999;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 <body>
-    <!-- Отладочное сообщение -->
-    <div class="debug-info" id="debugMessage">
-        🔍 Загрузка StyleBox... Если видишь это сообщение - CSS не загрузился
-    </div>
-
     <div class="app">
-        <!-- Шапка с меню -->
+        <!-- Шапка -->
         <header class="header">
             <div class="header-top">
                 <h1 class="logo">Style<span>Box</span></h1>
                 <div class="header-actions">
                     <button class="icon-btn" id="themeToggle">🌙</button>
-                    <button class="icon-btn" id="menuToggle">☰</button>
-                    <button class="cart-icon" id="cartToggle">
-                        🛒 <span class="cart-badge" id="navCartBadge">0</span>
-                    </button>
+                    <button class="menu-btn" id="menuToggle">☰</button>
                 </div>
             </div>
             
-            <!-- Боковое меню -->
+            <!-- Боковое меню (единственная навигация) -->
             <div class="side-menu" id="sideMenu">
                 <div class="menu-header">
                     <h3>Меню</h3>
@@ -79,18 +55,14 @@
                         <div class="menu-item" data-page="settings">
                             <span>⚙️</span> Настройки
                         </div>
-                        <div class="menu-item" data-page="settings">
-    <span>⚙️</span> Настройки
-</div>
-<!-- ДОБАВЬ ЭТОТ ПУНКТ -->
-<div class="menu-item" data-page="support">
-    <span>🆘</span> Поддержка
-</div>
+                        <div class="menu-item" data-page="support">
+                            <span>🆘</span> Поддержка
+                        </div>
                     </div>
                     
                     <div class="menu-footer">
-                        <div class="points-balance">
-                            <span>💎 Бонусы:</span>
+                        <div class="points-display">
+                            <span>⭐ Бонусы:</span>
                             <span class="points-value" id="pointsDisplay">0</span>
                         </div>
                     </div>
@@ -106,31 +78,16 @@
             <!-- Сюда будет загружаться контент -->
         </main>
 
-        <!-- Нижняя навигация -->
-        <nav class="bottom-nav">
-            <div class="nav-item active" data-page="main">
-                <span class="nav-icon">🏠</span>
-                <span class="nav-label">Главная</span>
+        <!-- Простая панель с бонусами и кнопкой меню (ЗАМЕНЯЕТ нижнюю навигацию) -->
+        <div class="bottom-panel">
+            <div class="bonus-widget">
+                <span class="bonus-icon">⭐</span>
+                <span class="bonus-amount" id="bottomBonus">0</span>
             </div>
-            <div class="nav-item" data-page="wishlist">
-                <span class="nav-icon">❤️</span>
-                <span class="nav-label">Избранное</span>
-                <span class="nav-badge" id="navWishlistBadge">0</span>
-            </div>
-            <div class="nav-item" data-page="deals">
-                <span class="nav-icon">🔥</span>
-                <span class="nav-label">Скидки</span>
-            </div>
-            <div class="nav-item" data-page="cart">
-                <span class="nav-icon">🛒</span>
-                <span class="nav-label">Корзина</span>
-                <span class="nav-badge" id="navCartBadge">0</span>
-            </div>
-            <div class="nav-item" data-page="profile">
-                <span class="nav-icon">👤</span>
-                <span class="nav-label">Профиль</span>
-            </div>
-        </nav>
+            <button class="open-menu-btn" id="bottomMenuBtn">
+                ☰ Открыть меню
+            </button>
+        </div>
 
         <!-- Боковая корзина -->
         <div class="cart-sidebar" id="cartSidebar">
@@ -160,19 +117,7 @@
 
     <!-- Telegram Web App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Наш скрипт с версией для сброса кэша -->
-    <script src="script.js?v=2.0"></script>
-    
-    <script>
-        // Убираем отладочное сообщение после загрузки
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                const debug = document.getElementById('debugMessage');
-                if (debug) debug.style.display = 'none';
-            }, 2000);
-        });
-    </script>
+    <!-- Наш скрипт -->
+    <script src="script.js?v=3.0"></script>
 </body>
 </html>
-
-
