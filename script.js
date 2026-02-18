@@ -34,7 +34,7 @@ let state = {
     points: 0
 };
 
-// ТОВАРЫ С ФОТОГРАФИЯМИ (20 штук)
+// ТОВАРЫ С ФОТОГРАФИЯМИ (20 штук) - ИСПРАВЛЕНО: убрал images/
 const products = [
     // ФУТБОЛКИ (shirts)
     { 
@@ -44,7 +44,7 @@ const products = [
         oldPrice: 1299, 
         category: "shirts", 
         emoji: "👕", 
-        image: "images/red-tshirt.jpg",
+        image: "red-tshirt.jpg",
         description: "Стильная красная футболка из 100% хлопка. Идеально для повседневной носки." 
     },
     { 
@@ -54,7 +54,7 @@ const products = [
         oldPrice: 1599, 
         category: "shirts", 
         emoji: "👕", 
-        image: "images/black-tshirt.jpg",
+        image: "black-tshirt.jpg",
         description: "Модная футболка свободного кроя. Подойдет к любым джинсам." 
     },
     { 
@@ -64,7 +64,7 @@ const products = [
         oldPrice: 1799, 
         category: "shirts", 
         emoji: "👕", 
-        image: "images/white-print.jpg",
+        image: "white-print.jpg",
         description: "Оригинальный принт, качественная печать, не выцветает." 
     },
     { 
@@ -74,7 +74,7 @@ const products = [
         oldPrice: 1999, 
         category: "shirts", 
         emoji: "👔", 
-        image: "images/blue-polo.jpg",
+        image: "blue-polo.jpg",
         description: "Классическое поло из хлопка. Для стильных образов." 
     },
     
@@ -86,7 +86,7 @@ const products = [
         oldPrice: 2499, 
         category: "pants", 
         emoji: "👖", 
-        image: "images/blue-jeans.jpg",
+        image: "blue-jeans.jpg",
         description: "Классические синие джинсы. Удобные и практичные." 
     },
     { 
@@ -96,7 +96,7 @@ const products = [
         oldPrice: 2199, 
         category: "pants", 
         emoji: "🩳", 
-        image: "images/black-chinos.jpg",
+        image: "black-chinos.jpg",
         description: "Стильные черные брюки. Универсальный вариант для офиса и прогулок." 
     },
     { 
@@ -106,7 +106,7 @@ const products = [
         oldPrice: 2399, 
         category: "pants", 
         emoji: "👖", 
-        image: "images/skinny-jeans.jpg",
+        image: "skinny-jeans.jpg",
         description: "Обтягивающие джинсы, подчеркивают фигуру." 
     },
     { 
@@ -116,7 +116,7 @@ const products = [
         oldPrice: 1599, 
         category: "pants", 
         emoji: "👖", 
-        image: "images/sport-pants.jpg",
+        image: "sport-pants.jpg",
         description: "Удобные штаны для спорта и дома." 
     },
     
@@ -128,7 +128,7 @@ const products = [
         oldPrice: 5999, 
         category: "shoes", 
         emoji: "👟", 
-        image: "images/nike-air.jpg",
+        image: "nike-air.jpg",
         description: "Оригинальные кроссовки Nike. Максимальный комфорт при ходьбе." 
     },
     { 
@@ -138,7 +138,7 @@ const products = [
         oldPrice: 4599, 
         category: "shoes", 
         emoji: "👞", 
-        image: "images/converse.jpg",
+        image: "converse.jpg",
         description: "Классические кеды Converse. Всегда в моде." 
     },
     { 
@@ -148,7 +148,7 @@ const products = [
         oldPrice: 6999, 
         category: "shoes", 
         emoji: "👢", 
-        image: "images/winter-boots.jpg",
+        image: "winter-boots.jpg",
         description: "Теплые зимние ботинки, не скользят." 
     },
     { 
@@ -158,7 +158,7 @@ const products = [
         oldPrice: 3899, 
         category: "shoes", 
         emoji: "👞", 
-        image: "images/shoes.jpg",
+        image: "shoes.jpg",
         description: "Классические туфли на каждый день." 
     },
     
@@ -170,7 +170,7 @@ const products = [
         oldPrice: 3599, 
         category: "hoodies", 
         emoji: "🧥", 
-        image: "images/grey-hoodie.jpg",
+        image: "grey-hoodie.jpg",
         description: "Теплое худи с капюшоном. Для уютных вечеров." 
     },
     { 
@@ -180,7 +180,7 @@ const products = [
         oldPrice: 3299, 
         category: "hoodies", 
         emoji: "🧥", 
-        image: "images/print-hoodie.jpg",
+        image: "print-hoodie.jpg",
         description: "Модная толстовка с оригинальным принтом." 
     },
     { 
@@ -190,7 +190,7 @@ const products = [
         oldPrice: 2999, 
         category: "hoodies", 
         emoji: "🧥", 
-        image: "images/sweatshirt.jpg",
+        image: "sweatshirt.jpg",
         description: "Спортивный стиль на каждый день." 
     },
     
@@ -202,7 +202,7 @@ const products = [
         oldPrice: 1199, 
         category: "accessories", 
         emoji: "🧢", 
-        image: "images/cap.jpg",
+        image: "cap.jpg",
         description: "Стильная бейсболка. Защитит от солнца." 
     },
     { 
@@ -212,7 +212,7 @@ const products = [
         oldPrice: 1999, 
         category: "accessories", 
         emoji: "🕶️", 
-        image: "images/sunglasses.jpg",
+        image: "sunglasses.jpg",
         description: "Модные солнцезащитные очки." 
     },
     { 
@@ -222,7 +222,7 @@ const products = [
         oldPrice: 2799, 
         category: "accessories", 
         emoji: "🎒", 
-        image: "images/backpack.jpg",
+        image: "backpack.jpg",
         description: "Вместительный рюкзак для учебы и прогулок." 
     },
     { 
@@ -232,7 +232,7 @@ const products = [
         oldPrice: 999, 
         category: "accessories", 
         emoji: "🧣", 
-        image: "images/scarf.jpg",
+        image: "scarf.jpg",
         description: "Теплый шарф для холодной погоды." 
     },
     { 
@@ -242,7 +242,7 @@ const products = [
         oldPrice: 899, 
         category: "accessories", 
         emoji: "🧤", 
-        image: "images/hat.jpg",
+        image: "hat.jpg",
         description: "Модная вязаная шапка." 
     }
 ];
