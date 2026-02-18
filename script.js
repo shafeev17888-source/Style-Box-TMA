@@ -814,7 +814,7 @@ function showNotification(message) {
     }, 2000);
 }
 
-// ОБНОВЛЕНИЕ БЕЙДЖЕЙ
+// ОБНОВЛЕННАЯ функция updateAllBadges
 function updateAllBadges() {
     const cartCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
     const wishlistCount = state.wishlist.length;
@@ -823,6 +823,7 @@ function updateAllBadges() {
     const wishlistBadge = document.getElementById('navWishlistBadge');
     const menuWishlistBadge = document.getElementById('wishlistBadge');
     const pointsDisplay = document.getElementById('pointsDisplay');
+    const bottomBonus = document.getElementById('bottomBonus');
     
     if (cartBadge) {
         cartBadge.textContent = cartCount;
@@ -839,6 +840,11 @@ function updateAllBadges() {
     
     if (pointsDisplay) {
         pointsDisplay.textContent = state.points;
+    }
+    
+    // ОБНОВЛЯЕМ БОНУСЫ В НИЖНЕЙ ПАНЕЛИ
+    if (bottomBonus) {
+        bottomBonus.textContent = state.points;
     }
 }
 
@@ -954,5 +960,6 @@ function toggleTheme() {
 function addPageButtonsListeners() {
     // Здесь можно добавить специфичные обработчики если нужно
 }
+
 
 
