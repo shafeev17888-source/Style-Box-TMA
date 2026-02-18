@@ -1,3 +1,20 @@
+// ПОЛНОЕ ОТКЛЮЧЕНИЕ ТЕМЫ TELEGRAM
+if (window.Telegram?.WebApp) {
+    const tg = window.Telegram.WebApp;
+    
+    // Отключаем автоматическую тему
+    tg.setHeaderColor('#FFFFFF'); // Белая шапка
+    tg.setBackgroundColor('#F8F9FF'); // Наш цвет фона
+    
+    // Принудительно устанавливаем светлую тему
+    document.body.style.background = '#F8F9FF';
+    document.body.style.color = '#1A1A2E';
+    
+    // Убираем красную шапку
+    tg.setHeaderColor('#FFFFFF');
+    
+    console.log('🎨 Telegram тема отключена');
+}
 // Telegram Web App инициализация
 const tg = window.Telegram?.WebApp;
 if (tg) {
@@ -831,3 +848,4 @@ function toggleTheme() {
 function addPageButtonsListeners() {
     // Здесь можно добавить специфичные обработчики если нужно
 }
+
