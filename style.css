@@ -1450,6 +1450,163 @@ h1, h2, h3, h4, h5, h6, p, span {
 .copy-animation {
     animation: copyPulse 0.3s ease;
 }
+/* НОВАЯ НИЖНЯЯ ПАНЕЛЬ (вместо навигации) */
+.bottom-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+    z-index: 90;
+    border-top: 2px solid var(--primary);
+}
+
+.bonus-widget {
+    background: var(--bg);
+    padding: 10px 20px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow);
+}
+
+.bonus-icon {
+    font-size: 20px;
+}
+
+.bonus-amount {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.open-menu-btn {
+    background: var(--gradient);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow);
+    transition: all 0.2s;
+}
+
+.open-menu-btn:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-strong);
+}
+
+.open-menu-btn:active {
+    transform: scale(0.98);
+}
+
+/* Убираем старую нижнюю навигацию */
+.bottom-nav {
+    display: none !important;
+}
+
+/* Адаптация основного контента под новую панель */
+.app {
+    padding-bottom: 90px;
+}
+
+.main-content {
+    min-height: calc(100vh - 180px);
+}
+
+/* Обновляем боковое меню (делаем его красивее) */
+.side-menu {
+    width: 320px;
+    border-radius: 0 20px 20px 0;
+}
+
+.menu-header {
+    background: var(--gradient);
+    color: white;
+}
+
+.menu-header h3 {
+    color: white;
+}
+
+.close-menu {
+    color: white;
+    opacity: 0.8;
+}
+
+.close-menu:hover {
+    opacity: 1;
+}
+
+.user-profile {
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+    color: white;
+}
+
+.user-name {
+    color: white;
+}
+
+.menu-footer {
+    margin-top: 20px;
+    padding: 15px;
+    background: linear-gradient(135deg, #f6f6f6, #eaeaea);
+    border-radius: 12px;
+}
+
+[data-theme="dark"] .menu-footer {
+    background: linear-gradient(135deg, #2a2a3a, #1e1e2e);
+}
+
+.points-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.points-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+/* Кнопка меню в шапке */
+.menu-btn {
+    background: var(--gradient);
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+}
+
+.menu-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Убираем дубликат настроек если есть */
+.menu-item[data-page="settings"]:nth-of-type(2) {
+    display: none;
+}
 
 
 
