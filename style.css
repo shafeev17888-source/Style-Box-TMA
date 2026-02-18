@@ -1179,5 +1179,140 @@ input:checked + .slider:before {
         font-size: 60px;
     }
 }
+/* ПОЛНОЕ ОТКЛЮЧЕНИЕ ТЕМЫ TELEGRAM */
+body:not(.telegram-light):not(.telegram-dark) {
+    /* Насильно устанавливаем свои цвета */
+    --bg: #F8F9FF !important;
+    --surface: #FFFFFF !important;
+    --text: #1A1A2E !important;
+    --text-light: #4A4A5A !important;
+    --primary: #8A2BE2 !important;
+}
+
+/* Отключаем прозрачность */
+* {
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Фиксим фон */
+body {
+    background: #F8F9FF !important;
+}
+
+.app {
+    background: transparent !important;
+}
+
+/* Делаем карточки товаров видимыми */
+.product-card {
+    background: #FFFFFF !important;
+    border: 1px solid #E0E0E0 !important;
+    box-shadow: 0 5px 15px rgba(138, 43, 226, 0.1) !important;
+}
+
+.product-name {
+    color: #1A1A2E !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.current-price {
+    color: #8A2BE2 !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+}
+
+/* Фиксим нижнюю навигацию */
+.bottom-nav {
+    background: #FFFFFF !important;
+    border-top: 2px solid #8A2BE2 !important;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.1) !important;
+}
+
+.nav-item {
+    color: #666666 !important;
+}
+
+.nav-item.active {
+    color: #8A2BE2 !important;
+    background: #F0F0F0 !important;
+}
+
+/* Фиксим шапку - убираем красный фон */
+.header {
+    background: #FFFFFF !important;
+    box-shadow: 0 5px 20px rgba(138, 43, 226, 0.1) !important;
+}
+
+/* Фиксим меню */
+.side-menu {
+    background: #FFFFFF !important;
+}
+
+.menu-item {
+    color: #1A1A2E !important;
+}
+
+.menu-item.active {
+    background: #8A2BE2 !important;
+    color: #FFFFFF !important;
+}
+
+/* Фиксим кнопки */
+.add-to-cart-btn {
+    background: #8A2BE2 !important;
+    color: #FFFFFF !important;
+}
+
+/* Фиксим категории */
+.category-item {
+    background: #FFFFFF !important;
+    color: #1A1A2E !important;
+}
+
+/* Фиксим текст */
+h1, h2, h3, h4, h5, h6, p, span {
+    color: inherit !important;
+}
+
+/* Специально для телефона */
+@media (max-width: 600px) {
+    /* Увеличиваем текст на телефоне */
+    .product-name {
+        font-size: 18px !important;
+    }
+    
+    .current-price {
+        font-size: 24px !important;
+    }
+    
+    .nav-label {
+        font-size: 14px !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Делаем фон непрозрачным */
+    .product-card {
+        background: #FFFFFF !important;
+        opacity: 1 !important;
+    }
+    
+    /* Убираем возможные прозрачности */
+    body, .app, .main-content {
+        background: #F8F9FF !important;
+    }
+}
+
+/* Принудительная светлая тема */
+:root {
+    color-scheme: light only !important;
+}
+
+/* Отключаем темную тему Telegram */
+[data-theme="dark"] body {
+    /* Даже в темной теме оставляем светлую */
+    background: #F8F9FF !important;
+    color: #1A1A2E !important;
+}
 
 
