@@ -4,9 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StyleBox - Твой стиль</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- Принудительное обновление кэша -->
+    <link rel="stylesheet" href="style.css?v=2.0">
+    <!-- Запасной вариант на случай ошибки -->
+    <style>
+        /* Базовые стили на случай если CSS не загрузится */
+        body { margin: 0; font-family: Arial; background: #f5f5f5; }
+        .debug-info { 
+            background: #ff6b6b; 
+            color: white; 
+            padding: 10px; 
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body>
+    <!-- Отладочное сообщение -->
+    <div class="debug-info" id="debugMessage">
+        🔍 Загрузка StyleBox... Если видишь это сообщение - CSS не загрузился
+    </div>
+
     <div class="app">
         <!-- Шапка с меню -->
         <header class="header">
@@ -127,7 +149,17 @@
 
     <!-- Telegram Web App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Наш скрипт -->
-    <script src="script.js"></script>
+    <!-- Наш скрипт с версией для сброса кэша -->
+    <script src="script.js?v=2.0"></script>
+    
+    <script>
+        // Убираем отладочное сообщение после загрузки
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const debug = document.getElementById('debugMessage');
+                if (debug) debug.style.display = 'none';
+            }, 2000);
+        });
+    </script>
 </body>
 </html>
