@@ -1314,5 +1314,142 @@ h1, h2, h3, h4, h5, h6, p, span {
     background: #F8F9FF !important;
     color: #1A1A2E !important;
 }
+/* СТРАНИЦА ПОДДЕРЖКИ */
+.support-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+.support-card {
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+}
+
+.support-card h4 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Контактный элемент */
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: var(--bg);
+    border-radius: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.contact-item:hover {
+    transform: translateX(5px);
+    border-color: var(--primary);
+    background: var(--surface);
+}
+
+.contact-icon {
+    width: 45px;
+    height: 45px;
+    background: var(--primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+}
+
+.contact-info {
+    flex: 1;
+}
+
+.contact-label {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 4px;
+}
+
+.contact-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    transition: color 0.2s;
+}
+
+.contact-action {
+    font-size: 24px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.contact-item:hover .contact-action {
+    opacity: 1;
+}
+
+/* Кнопка чата */
+.support-chat-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: var(--gradient);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.2s;
+}
+
+.support-chat-btn:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-strong);
+}
+
+/* Время работы */
+.work-time {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 16px;
+    color: var(--text);
+    padding: 5px 0;
+}
+
+.work-time div {
+    padding: 8px;
+    background: var(--bg);
+    border-radius: 10px;
+}
+
+/* Текст поддержки */
+.support-text {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+/* Анимация копирования */
+@keyframes copyPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); background: rgba(0, 184, 148, 0.1); }
+    100% { transform: scale(1); }
+}
+
+.copy-animation {
+    animation: copyPulse 0.3s ease;
+}
+
 
 
