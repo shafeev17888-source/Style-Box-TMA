@@ -1,3 +1,8 @@
+/* ТЕСТОВЫЙ СТИЛЬ - если шапка станет красной, CSS работает */
+.header {
+    background: red !important;
+}
+}
 :root {
     --primary: #8A2BE2;
     --primary-light: #9D4EDD;
@@ -1179,3 +1184,4 @@ input:checked + .slider:before {
         font-size: 60px;
     }
 }
+
