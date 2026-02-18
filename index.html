@@ -3,63 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StyleBox - Модный помощник</title>
+    <title>StyleBox - Твой стиль</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app">
-        <!-- Шапка с Telegram интеграцией -->
+        <!-- Шапка с меню -->
         <header class="header">
             <div class="header-top">
                 <h1 class="logo">Style<span>Box</span></h1>
                 <div class="header-actions">
                     <button class="icon-btn" id="themeToggle">🌙</button>
+                    <button class="icon-btn" id="menuToggle">☰</button>
                     <button class="cart-icon" id="cartToggle">
-                        🛒 <span class="cart-badge" id="cartBadge">0</span>
+                        🛒 <span class="cart-badge" id="navCartBadge">0</span>
                     </button>
                 </div>
             </div>
-            <p class="subtitle">Подберем идеальный образ</p>
+            
+            <!-- Боковое меню -->
+            <div class="side-menu" id="sideMenu">
+                <div class="menu-header">
+                    <h3>Меню</h3>
+                    <button class="close-menu" id="closeMenu">✕</button>
+                </div>
+                <div class="menu-content">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userAvatar">👤</div>
+                        <div class="user-name" id="userName">Гость</div>
+                    </div>
+                    
+                    <div class="menu-items">
+                        <div class="menu-item active" data-page="main">
+                            <span>🏠</span> Главная
+                        </div>
+                        <div class="menu-item" data-page="wishlist">
+                            <span>❤️</span> Избранное 
+                            <span class="menu-badge" id="wishlistBadge">0</span>
+                        </div>
+                        <div class="menu-item" data-page="recent">
+                            <span>⏱️</span> Недавние
+                        </div>
+                        <div class="menu-item" data-page="deals">
+                            <span>🔥</span> Скидки
+                        </div>
+                        <div class="menu-item" data-page="profile">
+                            <span>👤</span> Профиль
+                        </div>
+                        <div class="menu-item" data-page="settings">
+                            <span>⚙️</span> Настройки
+                        </div>
+                    </div>
+                    
+                    <div class="menu-footer">
+                        <div class="points-balance">
+                            <span>💎 Бонусы:</span>
+                            <span class="points-value" id="pointsDisplay">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Оверлей -->
+            <div class="menu-overlay" id="menuOverlay"></div>
         </header>
 
-        <!-- Поиск и фильтры -->
-        <div class="search-section">
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Поиск одежды...">
+        <!-- Основной контент -->
+        <main class="main-content" id="mainContent">
+            <!-- Сюда будет загружаться контент -->
+        </main>
+
+        <!-- Нижняя навигация -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-page="main">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Главная</span>
             </div>
-        </div>
-
-        <div class="filters-wrapper">
-            <div class="filters-scroll" id="filters">
-                <button class="filter-btn active" data-filter="all">Все</button>
-                <button class="filter-btn" data-filter="shirts">👕 Футболки</button>
-                <button class="filter-btn" data-filter="pants">👖 Штаны</button>
-                <button class="filter-btn" data-filter="shoes">👟 Обувь</button>
-                <button class="filter-btn" data-filter="hoodies">🧥 Худи</button>
-                <button class="filter-btn" data-filter="accessories">🧢 Аксессуары</button>
+            <div class="nav-item" data-page="wishlist">
+                <span class="nav-icon">❤️</span>
+                <span class="nav-label">Избранное</span>
+                <span class="nav-badge" id="navWishlistBadge">0</span>
             </div>
-        </div>
+            <div class="nav-item" data-page="deals">
+                <span class="nav-icon">🔥</span>
+                <span class="nav-label">Скидки</span>
+            </div>
+            <div class="nav-item" data-page="cart">
+                <span class="nav-icon">🛒</span>
+                <span class="nav-label">Корзина</span>
+                <span class="nav-badge" id="navCartBadge">0</span>
+            </div>
+            <div class="nav-item" data-page="profile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-label">Профиль</span>
+            </div>
+        </nav>
 
-        <!-- Сортировка -->
-        <div class="sort-bar">
-            <span>Сортировать:</span>
-            <select id="sortSelect">
-                <option value="default">По умолчанию</option>
-                <option value="priceAsc">Цена ↑</option>
-                <option value="priceDesc">Цена ↓</option>
-                <option value="nameAsc">По имени ↑</option>
-                <option value="nameDesc">По имени ↓</option>
-            </select>
-        </div>
-
-        <!-- Товары -->
-        <div class="products-grid" id="productsGrid"></div>
-
-        <!-- Корзина (боковое меню) -->
+        <!-- Боковая корзина -->
         <div class="cart-sidebar" id="cartSidebar">
             <div class="cart-header">
-                <h2>Корзина 🛒</h2>
+                <h2>🛒 Корзина</h2>
                 <button class="close-cart" id="closeCart">✕</button>
             </div>
             <div class="cart-items" id="cartItems"></div>
@@ -69,21 +112,22 @@
                     <span class="total-price" id="cartTotal">0 ₽</span>
                 </div>
                 <button class="checkout-btn" id="checkoutBtn">Оформить заказ</button>
-                <button class="clear-cart-btn" id="clearCartBtn">Очистить корзину</button>
+                <button class="clear-cart-btn" id="clearCartBtn">Очистить</button>
             </div>
         </div>
 
-        <!-- Попап товара -->
-        <div class="product-modal" id="productModal">
+        <!-- Модальное окно товара -->
+        <div class="modal" id="productModal">
             <div class="modal-content">
-                <button class="close-modal">✕</button>
+                <button class="close-modal" onclick="closeModal()">✕</button>
                 <div class="modal-body" id="modalBody"></div>
             </div>
         </div>
     </div>
 
-    <!-- Telegram Web App скрипт -->
+    <!-- Telegram Web App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Наш скрипт -->
     <script src="script.js"></script>
 </body>
 </html>
