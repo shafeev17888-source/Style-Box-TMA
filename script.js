@@ -133,6 +133,9 @@ function renderPage(page) {
         case 'settings':
             content.innerHTML = renderSettingsPage();
             break;
+             case 'support':
+            content.innerHTML = renderSupportPage();
+            break;
         default:
             content.innerHTML = renderMainPage();
     }
@@ -425,6 +428,109 @@ function renderSettingsPage() {
             </div>
         </div>
     `;
+}
+// СТРАНИЦА ПОДДЕРЖКИ
+function renderSupportPage() {
+    return `
+        <div class="section-header">
+            <h3 class="section-title">🆘 Поддержка</h3>
+        </div>
+        
+        <div class="support-container">
+            <div class="support-card">
+                <h4>📞 Контакты</h4>
+                
+                <!-- Телефон - копируется при нажатии -->
+                <div class="contact-item" onclick="copyPhone()">
+                    <div class="contact-icon">📱</div>
+                    <div class="contact-info">
+                        <div class="contact-label">Телефон</div>
+                        <div class="contact-value" id="phoneNumber">+7 (987) 149-48-82</div>
+                    </div>
+                    <div class="contact-action">📋</div>
+                </div>
+                
+                <!-- Telegram - открывает чат -->
+                <div class="contact-item" onclick="openTelegram()">
+                    <div class="contact-icon">✈️</div>
+                    <div class="contact-info">
+                        <div class="contact-label">Telegram</div>
+                        <div class="contact-value" id="telegramUsername">@dewwreqqqqq</div>
+                    </div>
+                    <div class="contact-action">↗️</div>
+                </div>
+            </div>
+            
+            <div class="support-card">
+                <h4>💬 Написать нам</h4>
+                <p class="support-text">Есть вопросы? Напиши нам в Telegram, и мы поможем!</p>
+                <button class="support-chat-btn" onclick="openTelegram()">
+                    Открыть чат →
+                </button>
+            </div>
+            
+            <div class="support-card">
+                <h4>⏰ Время работы</h4>
+                <div class="work-time">
+                    <div>Пн-Пт: 9:00 - 20:00</div>
+                    <div>Сб-Вс: 10:00 - 18:00</div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Функция для копирования телефона
+function copyPhone() {
+    const phone = document.getElementById('phoneNumber')?.textContent;
+    if (!phone) return;
+    
+    // Убираем скобки и пробелы для копирования
+    const phoneClean = phone.replace(/[^\d+]/g, '');
+    
+    // Копируем
+    navigator.clipboard.writeText(phoneClean).then(() => {
+        showNotification('✅ Номер скопирован!');
+        
+        // Визуальный эффект
+        const el = document.getElementById('phoneNumber');
+        if (el) {
+            el.style.color = '#00B894';
+            setTimeout(() => {
+                el.style.color = '';
+            }, 500);
+        }
+        
+        if (window.Telegram?.WebApp?.HapticFeedback) {
+            window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        }
+    }).catch(() => {
+        // Если не получилось скопировать - показываем старый номер
+        showNotification('📱 ' + phone);
+    });
+}
+
+// Функция для открытия Telegram
+function openTelegram() {
+    const username = 'dewwreqqqqq'; // Твой username без @
+    
+    // Пробуем открыть в Telegram
+    window.open(`https://t.me/${username}`, '_blank');
+    
+    // Визуальный эффект
+    const el = document.getElementById('telegramUsername');
+    if (el) {
+        el.style.color = '#0088cc';
+        setTimeout(() => {
+            el.style.color = '';
+        }, 500);
+    }
+    
+    showNotification('✈️ Открываю Telegram...');
+    
+    if (window.Telegram?.WebApp?.HapticFeedback) {
+        window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+    }
 }
 
 // СОЗДАНИЕ КАРТОЧКИ ТОВАРА
@@ -848,4 +954,5 @@ function toggleTheme() {
 function addPageButtonsListeners() {
     // Здесь можно добавить специфичные обработчики если нужно
 }
+
 
