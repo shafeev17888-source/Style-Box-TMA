@@ -202,7 +202,7 @@ const products = [
         oldPrice: 1199, 
         category: "accessories", 
         emoji: "🧢", 
-        image: "cap.jpg",
+        image: "black-cap.jpg",
         description: "Стильная бейсболка. Защитит от солнца." 
     },
     { 
@@ -1175,3 +1175,4 @@ function toggleTheme() {
 function addPageButtonsListeners() {
     // Здесь можно добавить специфичные обработчики если нужно
 }
+
