@@ -1181,7 +1181,6 @@ input:checked + .slider:before {
 }
 /* ПОЛНОЕ ОТКЛЮЧЕНИЕ ТЕМЫ TELEGRAM */
 body:not(.telegram-light):not(.telegram-dark) {
-    /* Насильно устанавливаем свои цвета */
     --bg: #F8F9FF !important;
     --surface: #FFFFFF !important;
     --text: #1A1A2E !important;
@@ -1238,7 +1237,7 @@ body {
     background: #F0F0F0 !important;
 }
 
-/* Фиксим шапку - убираем красный фон */
+/* Фиксим шапку */
 .header {
     background: #FFFFFF !important;
     box-shadow: 0 5px 20px rgba(138, 43, 226, 0.1) !important;
@@ -1275,9 +1274,8 @@ h1, h2, h3, h4, h5, h6, p, span {
     color: inherit !important;
 }
 
-/* Специально для телефона */
 @media (max-width: 600px) {
-    /* Увеличиваем текст на телефоне */
+
     .product-name {
         font-size: 18px !important;
     }
@@ -1297,7 +1295,6 @@ h1, h2, h3, h4, h5, h6, p, span {
         opacity: 1 !important;
     }
     
-    /* Убираем возможные прозрачности */
     body, .app, .main-content {
         background: #F8F9FF !important;
     }
@@ -1310,7 +1307,6 @@ h1, h2, h3, h4, h5, h6, p, span {
 
 /* Отключаем темную тему Telegram */
 [data-theme="dark"] body {
-    /* Даже в темной теме оставляем светлую */
     background: #F8F9FF !important;
     color: #1A1A2E !important;
 }
@@ -1450,7 +1446,7 @@ h1, h2, h3, h4, h5, h6, p, span {
 .copy-animation {
     animation: copyPulse 0.3s ease;
 }
-/* НОВАЯ НИЖНЯЯ ПАНЕЛЬ (вместо навигации) */
+/* НИЖНЯЯ ПАНЕЛЬ  */
 .bottom-panel {
     position: fixed;
     bottom: 0;
@@ -1525,7 +1521,7 @@ h1, h2, h3, h4, h5, h6, p, span {
     min-height: calc(100vh - 180px);
 }
 
-/* Обновляем боковое меню (делаем его красивее) */
+/* Обновляем боковое меню */
 .side-menu {
     width: 320px;
     border-radius: 0 20px 20px 0;
@@ -1642,6 +1638,7 @@ h1, h2, h3, h4, h5, h6, p, span {
     text-align: center;
     padding: 40px 0;
 }
+
 
 
 
