@@ -1,28 +1,22 @@
-// ПОЛНОЕ ОТКЛЮЧЕНИЕ ТЕМЫ TELEGRAM
+
 if (window.Telegram?.WebApp) {
     const tg = window.Telegram.WebApp;
-    
     // Отключаем автоматическую тему
     tg.setHeaderColor('#FFFFFF'); // Белая шапка
-    tg.setBackgroundColor('#F8F9FF'); // Наш цвет фона
-    
-    // Принудительно устанавливаем светлую тему
+    tg.setBackgroundColor('#F8F9FF'); // цвет фона тмв
+    // устанавливаем светлую тему
     document.body.style.background = '#F8F9FF';
     document.body.style.color = '#1A1A2E';
-    
     // Убираем красную шапку
     tg.setHeaderColor('#FFFFFF');
-    
     console.log('🎨 Telegram тема отключена');
 }
-
 // Telegram Web App инициализация
 const tg = window.Telegram?.WebApp;
 if (tg) {
     tg.expand();
     tg.enableClosingConfirmation();
 }
-
 // Состояние приложения
 let state = {
     currentPage: 'main',
@@ -33,10 +27,9 @@ let state = {
     user: null,
     points: 0
 };
-
-// ТОВАРЫ С ФОТОГРАФИЯМИ (20 штук) - ИСПРАВЛЕНО: убрал images/
+// ТОВАРЫ С ФОТОГРАФИЯМИ 
 const products = [
-    // ФУТБОЛКИ (shirts)
+    // ФУТБОЛКИ 
     { 
         id: 1, 
         name: "Красная футболка", 
@@ -78,7 +71,7 @@ const products = [
         description: "Классическое поло из хлопка. Для стильных образов." 
     },
     
-    // ШТАНЫ (pants)
+    // ШТАНЫ 
     { 
         id: 5, 
         name: "Синие джинсы", 
@@ -120,7 +113,7 @@ const products = [
         description: "Удобные штаны для спорта и дома." 
     },
     
-    // ОБУВЬ (shoes)
+    // ОБУВЬ 
     { 
         id: 9, 
         name: "Кроссовки Nike Air", 
@@ -162,7 +155,7 @@ const products = [
         description: "Классические туфли на каждый день." 
     },
     
-    // ХУДИ (hoodies)
+    // ХУДИ 
     { 
         id: 13, 
         name: "Худи с капюшоном серая", 
@@ -194,7 +187,7 @@ const products = [
         description: "Спортивный стиль на каждый день." 
     },
     
-    // АКСЕССУАРЫ (accessories)
+    // АКСЕССУАРЫ 
     { 
         id: 16, 
         name: "Бейсболка черная", 
@@ -254,21 +247,18 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
     renderPage('main');
     updateAllBadges();
-    
     // Показываем имя пользователя если есть
     if (tg?.initDataUnsafe?.user) {
         state.user = tg.initDataUnsafe.user;
         document.getElementById('userName').textContent = state.user.first_name;
     }
 });
-
 // Настройка обработчиков
 function setupEventListeners() {
     // Меню
     document.getElementById('menuToggle')?.addEventListener('click', toggleMenu);
     document.getElementById('closeMenu')?.addEventListener('click', toggleMenu);
     document.getElementById('menuOverlay')?.addEventListener('click', toggleMenu);
-    
     // Навигация
     document.querySelectorAll('.nav-item, .menu-item[data-page]').forEach(item => {
         item.addEventListener('click', (e) => {
@@ -276,7 +266,6 @@ function setupEventListeners() {
             if (page) navigateTo(page);
         });
     });
-    
     // Тема
     document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
     
@@ -287,7 +276,6 @@ function setupEventListeners() {
     document.getElementById('clearCartBtn')?.addEventListener('click', clearCart);
     document.getElementById('bottomCartBtn')?.addEventListener('click', toggleCart);
 }
-
 // НАВИГАЦИЯ
 function navigateTo(page) {
     state.currentPage = page;
@@ -302,12 +290,9 @@ function navigateTo(page) {
     
     // Закрываем меню
     toggleMenu();
-    
-    // Рендерим страницу
     renderPage(page);
 }
 
-// РЕНДЕРИНГ СТРАНИЦ
 function renderPage(page) {
     const content = document.getElementById('mainContent');
     if (!content) return;
@@ -341,7 +326,6 @@ function renderPage(page) {
             content.innerHTML = renderMainPage();
     }
     
-    // Добавляем обработчики для кнопок на странице
     addPageButtonsListeners();
 }
 
@@ -400,7 +384,6 @@ function renderMainPage() {
         </div>
     `;
 }
-
 // ИЗБРАННОЕ
 function renderWishlistPage() {
     const wishlistProducts = state.products.filter(p => state.wishlist.includes(p.id));
@@ -415,7 +398,6 @@ function renderWishlistPage() {
             </div>
         `;
     }
-    
     return `
         <div class="section-header">
             <h3 class="section-title">❤️ Избранное (${wishlistProducts.length})</h3>
@@ -425,7 +407,6 @@ function renderWishlistPage() {
         </div>
     `;
 }
-
 // НЕДАВНИЕ
 function renderRecentPage() {
     const recentProducts = state.recentlyViewed
@@ -702,16 +683,14 @@ function copyPhone() {
             window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
         }
     }).catch(() => {
-        // Если не получилось скопировать - показываем старый номер
         showNotification('📱 ' + phone);
     });
 }
 
 // Функция для открытия Telegram
 function openTelegram() {
-    const username = 'dewwreqqqqq'; // Твой username без @
+    const username = 'dewwreqqqqq'; 
     
-    // Пробуем открыть в Telegram
     window.open(`https://t.me/${username}`, '_blank');
     
     // Визуальный эффект
@@ -730,7 +709,7 @@ function openTelegram() {
     }
 }
 
-// СОЗДАНИЕ КАРТОЧКИ ТОВАРА (с поддержкой фото)
+// СОЗДАНИЕ КАРТОЧКИ ТОВАРА 
 function createProductCard(product) {
     const inCart = state.cart.some(item => item.id === product.id);
     const inWishlist = state.wishlist.includes(product.id);
@@ -774,11 +753,10 @@ function createProductCard(product) {
     `;
 }
 
-// МОДАЛЬНОЕ ОКНО ТОВАРА (с поддержкой фото)
+// МОДАЛЬНОЕ ОКНО ТОВАРА 
 function showProductModal(productId) {
     const product = state.products.find(p => p.id === productId);
     
-    // Добавляем в недавние
     addToRecentlyViewed(productId);
     
     const modal = document.getElementById('productModal');
@@ -836,7 +814,6 @@ function toggleWishlist(productId) {
     saveState();
     updateAllBadges();
     
-    // Обновляем страницу если нужно
     if (state.currentPage === 'wishlist') {
         renderPage('wishlist');
     }
@@ -853,7 +830,7 @@ function addToCart(productId) {
         state.cart.push({ ...product, quantity: 1 });
     }
     
-    // Добавляем бонусы
+    // бонусы
     state.points += 5;
     
     saveState();
@@ -1021,7 +998,6 @@ function showNotification(message) {
     }, 2000);
 }
 
-// ОБНОВЛЕННАЯ функция updateAllBadges
 function updateAllBadges() {
     const cartCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
     const wishlistCount = state.wishlist.length;
@@ -1057,7 +1033,6 @@ function updateAllBadges() {
         pointsDisplay.textContent = state.points;
     }
     
-    // Обновляем бонусы внизу
     if (bottomBonus) {
         bottomBonus.textContent = state.points;
     }
@@ -1171,8 +1146,7 @@ function toggleTheme() {
     }
 }
 
-// Добавление обработчиков для кнопок на странице
 function addPageButtonsListeners() {
-    // Здесь можно добавить специфичные обработчики если нужно
 }
+
 
