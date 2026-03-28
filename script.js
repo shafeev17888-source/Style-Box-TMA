@@ -1,4 +1,4 @@
-
+// ПОЛНОЕ ОТКЛЮЧЕНИЕ ТЕМЫ TELEGRAM
 if (window.Telegram?.WebApp) {
     const tg = window.Telegram.WebApp;
     // Отключаем автоматическую тему
@@ -27,6 +27,11 @@ let state = {
     user: null,
     points: 0
 };
+
+// ========== ПЕРЕМЕННЫЕ ДЛЯ ПОИСКА ==========
+let searchQuery = '';
+let filteredProducts = [];
+
 // ТОВАРЫ С ФОТОГРАФИЯМИ 
 const products = [
     // ФУТБОЛКИ 
@@ -252,7 +257,11 @@ document.addEventListener('DOMContentLoaded', function() {
         state.user = tg.initDataUnsafe.user;
         document.getElementById('userName').textContent = state.user.first_name;
     }
+    
+    // ========== ДОБАВЛЯЕМ ОБРАБОТЧИК ПАРАМЕТРОВ ==========
+    handleStartParam();
 });
+
 // Настройка обработчиков
 function setupEventListeners() {
     // Меню
@@ -276,6 +285,7 @@ function setupEventListeners() {
     document.getElementById('clearCartBtn')?.addEventListener('click', clearCart);
     document.getElementById('bottomCartBtn')?.addEventListener('click', toggleCart);
 }
+
 // НАВИГАЦИЯ
 function navigateTo(page) {
     state.currentPage = page;
@@ -329,7 +339,7 @@ function renderPage(page) {
     addPageButtonsListeners();
 }
 
-// ГЛАВНАЯ
+// ========== ГЛАВНАЯ С ПОИСКОМ ==========
 function renderMainPage() {
     const dealOfDay = getDealOfDay();
     
@@ -346,6 +356,15 @@ function renderMainPage() {
                 <button class="deal-btn">Купить со скидкой</button>
             </div>
             <div class="deal-emoji">${dealOfDay.emoji}</div>
+        </div>
+        
+        <!-- ПОЛЕ ПОИСКА -->
+        <div class="search-section">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Поиск одежды..." oninput="searchProducts()">
+                <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display: none;">✕</button>
+            </div>
         </div>
         
         <!-- Категории -->
@@ -384,6 +403,7 @@ function renderMainPage() {
         </div>
     `;
 }
+
 // ИЗБРАННОЕ
 function renderWishlistPage() {
     const wishlistProducts = state.products.filter(p => state.wishlist.includes(p.id));
@@ -716,7 +736,7 @@ function createProductCard(product) {
     const discount = product.oldPrice ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100) : 0;
     
     return `
-        <div class="product-card" onclick="showProductModal(${product.id})">
+        <div class="product-card" data-card-id="${product.id}" onclick="showProductModal(${product.id})">
             <div class="wishlist-badge ${inWishlist ? 'active' : ''}" 
                  onclick="event.stopPropagation(); toggleWishlist(${product.id})">
                 ${inWishlist ? '❤️' : '🤍'}
@@ -744,13 +764,167 @@ function createProductCard(product) {
                     ${product.oldPrice ? `<span class="old-price">${product.oldPrice} ₽</span>` : ''}
                 </div>
                 
-                <button class="add-to-cart-btn" 
+                <button class="add-to-cart-btn" data-add-id="${product.id}" 
                         onclick="event.stopPropagation(); addToCart(${product.id})">
                     ${inCart ? '✓ В корзине' : 'В корзину'}
                 </button>
             </div>
         </div>
     `;
+}
+
+// ========== ФУНКЦИИ ПОИСКА ==========
+
+// Функция поиска товаров
+function searchProducts() {
+    const searchInput = document.getElementById('searchInput');
+    if (!searchInput) return;
+    
+    searchQuery = searchInput.value.toLowerCase().trim();
+    
+    // Показываем/скрываем кнопку очистки
+    const clearBtn = document.getElementById('searchClear');
+    if (clearBtn) {
+        clearBtn.style.display = searchQuery ? 'flex' : 'none';
+    }
+    
+    if (!searchQuery) {
+        // Если поиск пустой - показываем все товары
+        showAllProducts();
+        return;
+    }
+    
+    // Фильтруем товары
+    filteredProducts = state.products.filter(product => {
+        return product.name.toLowerCase().includes(searchQuery) ||
+               getCategoryName(product.category).toLowerCase().includes(searchQuery) ||
+               product.description.toLowerCase().includes(searchQuery);
+    });
+    
+    // Показываем результаты
+    showSearchResults();
+    
+    // Тактильная отдача
+    if (tg?.HapticFeedback) {
+        tg.HapticFeedback.impactOccurred('light');
+    }
+}
+
+// Показать все товары (сброс поиска)
+function showAllProducts() {
+    searchQuery = '';
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.value = '';
+    }
+    const clearBtn = document.getElementById('searchClear');
+    if (clearBtn) {
+        clearBtn.style.display = 'none';
+    }
+    
+    // Перерисовываем главную страницу
+    if (state.currentPage === 'main') {
+        renderPage('main');
+    }
+}
+
+// Показать результаты поиска
+function showSearchResults() {
+    const content = document.getElementById('mainContent');
+    if (!content) return;
+    
+    if (filteredProducts.length === 0) {
+        // Если ничего не найдено
+        content.innerHTML = `
+            <div class="search-empty">
+                <div class="search-empty-emoji">🔍</div>
+                <h3>Ничего не найдено</h3>
+                <p>По запросу "${searchQuery}" ничего не нашлось</p>
+                <button class="primary-btn" onclick="showAllProducts()">Показать все товары</button>
+            </div>
+        `;
+        return;
+    }
+    
+    // Показываем результаты поиска
+    content.innerHTML = `
+        <div class="search-results-info">
+            <span>🔍 Найдено ${filteredProducts.length} товаров</span>
+            <button class="clear-search-btn" onclick="showAllProducts()">Сбросить</button>
+        </div>
+        <div class="products-grid">
+            ${filteredProducts.map(product => createProductCard(product)).join('')}
+        </div>
+    `;
+    
+    // Добавляем обработчики для новых карточек
+    filteredProducts.forEach(product => {
+        const addBtn = document.querySelector(`[data-add-id="${product.id}"]`);
+        const likeBtn = document.querySelector(`[data-like-id="${product.id}"]`);
+        const card = document.querySelector(`[data-card-id="${product.id}"]`);
+        
+        if (addBtn) {
+            addBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                addToCart(product.id);
+            });
+        }
+        
+        if (likeBtn) {
+            likeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleWishlist(product.id);
+            });
+        }
+        
+        if (card) {
+            card.addEventListener('click', () => showProductModal(product.id));
+        }
+    });
+}
+
+// Очистить поиск
+function clearSearch() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.value = '';
+        searchInput.focus();
+    }
+    showAllProducts();
+}
+
+// ========== ОБРАБОТКА ПАРАМЕТРОВ ИЗ ССЫЛКИ ==========
+function handleStartParam() {
+    // Получаем параметры из URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const startapp = urlParams.get('startapp');
+    
+    console.log('📱 Открыт раздел:', startapp);
+    
+    // Если есть параметр - открываем нужную страницу
+    if (startapp) {
+        switch(startapp) {
+            case 'cart':
+                setTimeout(() => {
+                    toggleCart();
+                }, 500);
+                break;
+            case 'wishlist':
+                navigateTo('wishlist');
+                break;
+            case 'deals':
+                navigateTo('deals');
+                break;
+            case 'profile':
+                navigateTo('profile');
+                break;
+            case 'support':
+                navigateTo('support');
+                break;
+            default:
+                navigateTo('main');
+        }
+    }
 }
 
 // МОДАЛЬНОЕ ОКНО ТОВАРА 
@@ -1146,7 +1320,17 @@ function toggleTheme() {
     }
 }
 
+// Добавление обработчиков для кнопок на странице
 function addPageButtonsListeners() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.removeEventListener('input', searchProducts);
+        searchInput.addEventListener('input', searchProducts);
+    }
+    
+    const clearBtn = document.getElementById('searchClear');
+    if (clearBtn) {
+        clearBtn.removeEventListener('click', clearSearch);
+        clearBtn.addEventListener('click', clearSearch);
+    }
 }
-
-
