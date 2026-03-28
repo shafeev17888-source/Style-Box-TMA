@@ -1643,3 +1643,140 @@ h1, h2, h3, h4, h5, h6, p, span {
 
 
 
+/* Секция поиска */
+.search-section {
+    margin-bottom: 20px;
+    padding: 0 5px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border-radius: 30px;
+    padding: 12px 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--bg);
+    transition: all 0.3s ease;
+}
+
+.search-box:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.1);
+}
+
+.search-icon {
+    font-size: 20px;
+    margin-right: 12px;
+    opacity: 0.6;
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    color: var(--text);
+    outline: none;
+}
+
+.search-box input::placeholder {
+    color: var(--text-light);
+    opacity: 0.6;
+}
+
+.search-clear {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.search-clear:hover {
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* Результаты поиска */
+.search-results-info {
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    background: var(--surface);
+    border-radius: 12px;
+    font-size: 14px;
+    color: var(--text-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-results-info span {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.clear-search-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+.clear-search-btn:hover {
+    background: var(--bg);
+}
+
+/* Анимация для карточек при поиске */
+.product-card {
+    transition: all 0.3s ease;
+}
+
+.product-card.search-hidden {
+    display: none;
+}
+
+/* Пустое состояние поиска */
+.search-empty {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.search-empty-emoji {
+    font-size: 80px;
+    display: block;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.search-empty h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: var(--text);
+}
+
+.search-empty p {
+    color: var(--text-light);
+    margin-bottom: 20px;
+}
+
+.search-empty .primary-btn {
+    background: var(--gradient);
+    padding: 10px 25px;
+    font-size: 14px;
+}
+
+
+
+
